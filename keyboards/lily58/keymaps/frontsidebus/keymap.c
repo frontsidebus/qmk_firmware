@@ -15,11 +15,6 @@ extern rgblight_config_t rgblight_config;
 
 extern uint8_t is_master;
 
-void oled_task_user(void) {
-    if (is_keyboard_master()) {
-        render_wpm_graph();
-    }
-}
 
 #define _QWERTY 0
 #define _LOWER 1
@@ -134,7 +129,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
-int RGB_current_mode;
+int RGB_current_mode
+
+// Setting wpm graph to master or slave sides
+void oled_task_user(void) {
+    if (is_keyboard_master()) {
+        render_wpm_graph();
+    }
+}
 
 // Setting ADJUST layer RGB back to default
 void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) {
