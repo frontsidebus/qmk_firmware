@@ -9,7 +9,7 @@
 #endif
 
 // #ifdef OLED_DRIVER_ENABLE
-uint16_t slave_oled_timeout = 0;
+// uint16_t slave_oled_timeout = 0;
 // #endif
 
 #ifdef WPM_ENABLE
@@ -46,9 +46,9 @@ static void render_wpm_graph(void) {
 		return;
 	    }
 	    zero_bar_count++;
-	} else
-	    zero_bar_count=0;
-
+	// } else
+	//     zero_bar_count=0;
+    }
 	oled_pan(false);
 	bar_count++;
 	for (uint8_t i = (OLED_DISPLAY_HEIGHT / 8); i > 0; i--) {
