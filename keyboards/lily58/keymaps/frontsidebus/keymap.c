@@ -253,16 +253,16 @@ void oled_task_user(void) {
 // void set_timelog(void);
 // const char *read_timelog(void);
 
-void matrix_scan_user(void) {
-   iota_gfx_task();
-}
+// void matrix_scan_user(void) {
+//    iota_gfx_task();
+// }
 
-void matrix_update(struct CharacterMatrix *dest, const struct CharacterMatrix *source) {
-  if (memcmp(dest->display, source->display, sizeof(dest->display))) {
-    memcpy(dest->display, source->display, sizeof(dest->display));
-    dest->dirty = true;
-  }
-}
+// void matrix_update(struct CharacterMatrix *dest, const struct CharacterMatrix *source) {
+//   if (memcmp(dest->display, source->display, sizeof(dest->display))) {
+//     memcpy(dest->display, source->display, sizeof(dest->display));
+//     dest->dirty = true;
+//   }
+// }
 
 #endif//SSD1306OLED
 
