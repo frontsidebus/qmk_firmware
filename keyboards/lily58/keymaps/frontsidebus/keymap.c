@@ -242,7 +242,7 @@ void oled_task_user(void) {
 }
 
 // When add source files to SRC in rules.mk, you can use functions.
-const char *read_layer_state(void);
+// const char *read_layer_state(void);
 // const char *read_logo(void);
 // void set_keylog(uint16_t keycode, keyrecord_t *record);
 // const char *read_keylog(void);
