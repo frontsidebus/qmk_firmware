@@ -241,38 +241,9 @@ void oled_task_user(void) {
     }
 }
 
-// When add source files to SRC in rules.mk, you can use functions.
-// const char *read_layer_state(void);
-// const char *read_logo(void);
-// void set_keylog(uint16_t keycode, keyrecord_t *record);
-// const char *read_keylog(void);
-// const char *read_keylogs(void);
-
-// const char *read_mode_icon(bool swap);
-// const char *read_host_led_state(void);
-// void set_timelog(void);
-// const char *read_timelog(void);
-
-// void matrix_scan_user(void) {
-//    iota_gfx_task();
-// }
-
-// void matrix_update(struct CharacterMatrix *dest, const struct CharacterMatrix *source) {
-//   if (memcmp(dest->display, source->display, sizeof(dest->display))) {
-//     memcpy(dest->display, source->display, sizeof(dest->display));
-//     dest->dirty = true;
-//   }
-// }
-
 #endif//SSD1306OLED
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-//   if (record->event.pressed) {
-// #ifdef SSD1306OLED
-//     set_keylog(keycode, record);
-// #endif
-//     // set_timelog();
-//   }
 
   switch (keycode) {
     case QWERTY:
