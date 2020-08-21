@@ -8,9 +8,9 @@
   #include "ssd1306.h"
 #endif
 
-#ifdef OLED_DRIVER_ENABLE
-uint16_t slave_oled_timeout = 0;
-#endif
+// #ifdef OLED_DRIVER_ENABLE
+// uint16_t slave_oled_timeout = 0;
+// #endif
 
 #ifdef WPM_ENABLE
 uint16_t wpm_graph_timer = 0;
@@ -287,12 +287,12 @@ void iota_gfx_task_user(void) {
 #endif//SSD1306OLED
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (record->event.pressed) {
-#ifdef SSD1306OLED
-    set_keylog(keycode, record);
-#endif
-    // set_timelog();
-  }
+//   if (record->event.pressed) {
+// #ifdef SSD1306OLED
+//     set_keylog(keycode, record);
+// #endif
+//     // set_timelog();
+//   }
 
   switch (keycode) {
     case QWERTY:
