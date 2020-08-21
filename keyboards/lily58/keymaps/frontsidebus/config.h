@@ -30,17 +30,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define SSD1306OLED
 
+#ifdef OLED_DRIVER_ENABLE
+  #define OLED_DISPLAY_128X32
+  #define OLED_TIMEOUT 10000
+#endif
+
 #define USE_SERIAL_PD2
 
-#define TAPPING_FORCE_HOLD
+//#define TAPPING_FORCE_HOLD
 
 //#define RGBLIGHT_ANIMATIONS
 //#define RGBLIGHT_LIMIT_VAL 120
 //#define RGBLIGHT_HUE_STEP 10
 //#define RGBLIGHT_SAT_STEP 17
 //#define RGBLIGHT_VAL_STEP 17
-#undef TAPPING_TERM
-#define TAPPING_TERM 125
+//#undef TAPPING_TERM
+//#define TAPPING_TERM 125
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS
- 
+
 

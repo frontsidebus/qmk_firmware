@@ -42,6 +42,6 @@ SRC += ssd1306.c
 LIB_SRC += serial.c
 
 # if firmware size over limit, try this option
-# CFLAGS += -flto
+CFLAGS += -flto
 
 DEFAULT_FOLDER = lily58/rev1

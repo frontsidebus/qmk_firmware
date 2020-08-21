@@ -16,9 +16,14 @@ BLUETOOTH_ENABLE = no       # Enable Bluetooth with the Adafruit EZ-Key HID
 RGBLIGHT_ENABLE = no       # Enable WS2812 RGB underlight.
 RGB_MATRIX_ENABLE = WS2812
 SWAP_HANDS_ENABLE = no      # Enable one-hand typing
-TAP_DANCE_ENABLE = yes      # Enable tap dancing
+## non default features enabled or disabled here
+TAP_DANCE_ENABLE = no      # Enable tap dancing
 WPM_ENABLE = yes            # Enable WPM calc and transport
 OLED_DRIVER_ENABLE = yes   # Enables the use of OLED displays
+## deactivate common features here
+SPACE_CADET_ENABLE = no
+GRAVE_ESC_ENABLE = no
+MAGIC_ENABLE = no
 
 # Sliming down the firmware
 EXTRAFLAGS        += -flto
@@ -33,6 +38,6 @@ SRC +=  ./lib/glcdfont.c \
         ./lib/layer_state_reader.c \
         ./lib/logo_reader.c \
         ./lib/keylogger.c \
-         ./lib/mode_icon_reader.c \
-         ./lib/host_led_state_reader.c \
-         ./lib/timelogger.c \
+        # ./lib/mode_icon_reader.c \
+        # ./lib/host_led_state_reader.c \
+        # ./lib/timelogger.c \

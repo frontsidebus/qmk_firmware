@@ -8,9 +8,99 @@
   #include "ssd1306.h"
 #endif
 
-#ifdef RGBLIGHT_ENABLE
-//Following line allows macro to read current RGB settings
-extern rgblight_config_t rgblight_config;
+#ifdef OLED_DRIVER_ENABLE
+uint16_t slave_oled_timeout = 0;
+#endif
+
+#ifdef WPM_ENABLE
+uint16_t wpm_graph_timer = 0;
+#endif
+
+#ifdef WPM_ENABLE
+static void render_wpm_graph(void) {
+    static uint8_t zero_bar_count = 0;
+    static uint8_t bar_count = 0;
+    uint8_t bar_height = 0;
+    uint8_t bar_segment = 0;
+
+    if (wpm_graph_timer == 0) {
+	wpm_graph_timer = timer_read();
+	return;
+    }
+    if(timer_elapsed(wpm_graph_timer) > 500) {
+	wpm_graph_timer = timer_read();
+
+	if(OLED_DISPLAY_HEIGHT == 64)
+		bar_height = get_current_wpm() / 2;
+	if(OLED_DISPLAY_HEIGHT == 32)
+		bar_height = get_current_wpm() / 4;
+	if(bar_height > OLED_DISPLAY_HEIGHT)
+		bar_height = OLED_DISPLAY_HEIGHT;
+
+	if(bar_height == 0) {
+	    // keep track of how many zero bars we have drawn.  If
+	    // there is a whole screen worth, turn the display off and
+	    // wait until there is something to do
+	    if (zero_bar_count > OLED_DISPLAY_WIDTH) {
+		oled_off();
+		return;
+	    }
+	    zero_bar_count++;
+	} else
+	    zero_bar_count=0;
+
+	oled_pan(false);
+	bar_count++;
+	for (uint8_t i = (OLED_DISPLAY_HEIGHT / 8); i > 0; i--) {
+	    if (bar_height > 7) {
+		if (i % 2 == 1 && bar_count % 3 == 0)
+		    bar_segment = 254;
+		else
+		    bar_segment = 255;
+		bar_height -= 8;
+	    } else {
+		switch (bar_height) {
+		    case 0:
+			bar_segment = 0;
+			break;
+
+		    case 1:
+			bar_segment = 128;
+			break;
+
+		    case 2:
+			bar_segment = 192;
+			break;
+
+		    case 3:
+			bar_segment = 224;
+			break;
+
+		    case 4:
+			bar_segment = 240;
+			break;
+
+		    case 5:
+			bar_segment = 248;
+			break;
+
+		    case 6:
+			bar_segment = 252;
+			break;
+
+		    case 7:
+			bar_segment = 254;
+			break;
+		}
+		bar_height = 0;
+
+		if (i % 2 == 1 && bar_count % 3 == 0)
+		    bar_segment++;
+	    }
+	    oled_write_raw_byte(bar_segment, (i-1) * OLED_DISPLAY_WIDTH);
+	}
+    }
+}
 #endif
 
 extern uint8_t is_master;
@@ -32,12 +122,6 @@ enum {
   TD_HOME_LEFT = 0,
   TD_END_RIGHT
 };
-
-qk_tap_dance_action_t tap_dance_actions[] = {
-	[TD_HOME_LEFT] = ACTION_TAP_DANCE_DOUBLE(KC_LEFT, KC_HOME),
-	[TD_END_RIGHT] = ACTION_TAP_DANCE_DOUBLE(KC_RIGHT, KC_END)
-};
-
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -129,14 +213,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
-int RGB_current_mode
-
-// Setting wpm graph to master or slave sides
-void oled_task_user(void) {
-    if (is_keyboard_master()) {
-        render_wpm_graph();
-    }
-}
+int RGB_current_mode;
 
 // Setting ADJUST layer RGB back to default
 void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) {
@@ -148,9 +225,6 @@ void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) {
 }
 
 void matrix_init_user(void) {
-    #ifdef RGBLIGHT_ENABLE
-      RGB_current_mode = rgblight_config.mode;
-    #endif
     //SSD1306 OLED init, make sure to add #define SSD1306OLED in config.h
     #ifdef SSD1306OLED
         iota_gfx_init(!has_usb());   // turns on the display
@@ -159,6 +233,13 @@ void matrix_init_user(void) {
 
 //SSD1306 OLED update loop, make sure to add #define SSD1306OLED in config.h
 #ifdef SSD1306OLED
+
+// Setting wpm graph to master or slave sides
+void oled_task_user(void) {
+    if (is_keyboard_master()) {
+        render_wpm_graph();
+    }
+}
 
 // When add source files to SRC in rules.mk, you can use functions.
 const char *read_layer_state(void);
@@ -251,91 +332,3 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
-
-#ifdef WPM_ENABLE
-static void render_wpm_graph(void) {
-    static uint8_t zero_bar_count = 0;
-    static uint8_t bar_count = 0;
-    uint8_t bar_height = 0;
-    uint8_t bar_segment = 0;
-
-    if (wpm_graph_timer == 0) {
-	wpm_graph_timer = timer_read();
-	return;
-    }
-    if(timer_elapsed(wpm_graph_timer) > 500) {
-	wpm_graph_timer = timer_read();
-
-	if(OLED_DISPLAY_HEIGHT == 64)
-		bar_height = get_current_wpm() / 2;
-	if(OLED_DISPLAY_HEIGHT == 32)
-		bar_height = get_current_wpm() / 4;
-	if(bar_height > OLED_DISPLAY_HEIGHT)
-		bar_height = OLED_DISPLAY_HEIGHT;
-
-	if(bar_height == 0) {
-	    // keep track of how many zero bars we have drawn.  If
-	    // there is a whole screen worth, turn the display off and
-	    // wait until there is something to do
-	    if (zero_bar_count > OLED_DISPLAY_WIDTH) {
-		oled_off();
-		return;
-	    }
-	    zero_bar_count++;
-	} else
-	    zero_bar_count=0;
-
-	oled_pan(false);
-	bar_count++;
-	for (uint8_t i = (OLED_DISPLAY_HEIGHT / 8); i > 0; i--) {
-	    if (bar_height > 7) {
-		if (i % 2 == 1 && bar_count % 3 == 0)
-		    bar_segment = 254;
-		else
-		    bar_segment = 255;
-		bar_height -= 8;
-	    } else {
-		switch (bar_height) {
-		    case 0:
-			bar_segment = 0;
-			break;
-
-		    case 1:
-			bar_segment = 128;
-			break;
-
-		    case 2:
-			bar_segment = 192;
-			break;
-
-		    case 3:
-			bar_segment = 224;
-			break;
-
-		    case 4:
-			bar_segment = 240;
-			break;
-
-		    case 5:
-			bar_segment = 248;
-			break;
-
-		    case 6:
-			bar_segment = 252;
-			break;
-
-		    case 7:
-			bar_segment = 254;
-			break;
-		}
-		bar_height = 0;
-
-		if (i % 2 == 1 && bar_count % 3 == 0)
-		    bar_segment++;
-	    }
-	    oled_write_raw_byte(bar_segment, (i-1) * OLED_DISPLAY_WIDTH);
-	}
-    }
-}
-#endif
-
