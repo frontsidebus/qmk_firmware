@@ -38,11 +38,11 @@ static void render_wpm_graph(void) {
 		    bar_height = OLED_DISPLAY_HEIGHT;
 
 	    if(bar_height == 0) {
-	    keep track of how many zero bars we have drawn.  If
-	    there is a whole screen worth, turn the display off and
-	    wait until there is something to do
+	    //keep track of how many zero bars we have drawn.  If
+	    //there is a whole screen worth, do something else
 	        if (zero_bar_count > OLED_DISPLAY_WIDTH) {
             //oled_off();
+            //here is the "something else"
             static void render_logo(void) {
               static const char PROGMEM my_logo[] = {
                 // Paste the code from the previous step below this line!
@@ -84,6 +84,7 @@ static void render_wpm_graph(void) {
             }
             return;
 	        }
+          //end of "something else"
 	        zero_bar_count++;
             } else {
                 zero_bar_count=0;
