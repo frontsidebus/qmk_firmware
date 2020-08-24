@@ -18,7 +18,6 @@ RGB_MATRIX_ENABLE = WS2812
 SWAP_HANDS_ENABLE = no      # Enable one-hand typing
 ## non default features enabled or disabled here
 TAP_DANCE_ENABLE = no      # Enable tap dancing
-WPM_ENABLE = yes            # Enable WPM calc and transport
 OLED_DRIVER_ENABLE = yes   # Enables the use of OLED displays
 ## deactivate common features here
 SPACE_CADET_ENABLE = no
